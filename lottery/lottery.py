@@ -41,13 +41,13 @@ def lottery():
 		print(num, end=" ")
 		scores[num] = scores[num] + 1
 		
-		texts[num].set("{} {} : {}/{}".format(num, members[num], scores[num], target))
+		texts[num].set("{:2} {} : {:2}/{}".format(num, members[num], scores[num], target))
 		if scores[num] >= target:
 			labels[num]['background'] = 'black'
 		if scores[num] >= target - 3:
 			labels[num]['foreground'] = 'red'
 		
-		now.set(num)
+		now.set("{:2}".format(num))
 		
 		if scores[num] == target:
 			end = True
@@ -75,7 +75,7 @@ def reset():
 	i = 0
 	for m in members:
 		scores[i] = 0
-		texts[i].set("{} {} : {}/{}".format(i, m, scores[i], target))
+		texts[i].set("{:2} {} : {:2}/{}".format(i, m, scores[i], target))
 		labels[i]['foreground'] = 'black'
 		labels[i]['background'] = ''
 		i = i + 1
@@ -104,7 +104,7 @@ i = 0
 for m in members:
 	scores.append(0)
 	texts.append(StringVar())
-	texts[i].set("{} {} : {}/{}".format(i, m, scores[i], target))
+	texts[i].set("{:2} {} : {:2}/{}".format(i, m, scores[i], target))
 
 	labels.append(ttk.Label(frame1, textvariable=texts[i], font=my_font))
 
