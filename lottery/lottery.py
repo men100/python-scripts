@@ -13,6 +13,7 @@ target = 50
 now = StringVar()
 seedOption = StringVar()
 manualSeed = StringVar()
+striked = 0
 
 members = []
 labels = []
@@ -22,7 +23,7 @@ records = []
 
 def lottery():
 	resetButton['state'] = 'disable'
-	
+
 	startTime = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
 	if seedOption.get() == 'Auto':
 		seed = startTime
@@ -50,6 +51,7 @@ def lottery():
 		
 		if scores[num] == target:
 			end = True
+			striked = num
 		elif scores[num] >= target - 3:
 			slow = True
 
@@ -62,9 +64,12 @@ def lottery():
 
 	out = "lottery_{}.txt".format(startTime)
 	with open(out, "w", encoding="utf-8") as f:
-		f.write("seed=" + seed)
+		f.write('seed=' + seed + '\n')
+		f.write('number=')
 		for r in records:
-			f.write(r + " ")
+			f.write(r + ' ')
+		f.write('\n')
+		f.write('striked=' + str(striked) + ' ' + members[striked] + '\n')
 
 def reset():
 	i = 0
