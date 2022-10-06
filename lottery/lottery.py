@@ -36,18 +36,18 @@ def lottery():
 	end = False
 	while end != True:
 		num = random.randint(0, index - 1)
-		records.append(str(num))
+		records.append(str(num + 1))
 		
 		print(num, end=" ")
 		scores[num] = scores[num] + 1
 		
-		texts[num].set("{:2} {} : {:2}/{}".format(num, members[num], scores[num], target))
+		texts[num].set("{:2} {} : {:2}/{}".format(num + 1, members[num], scores[num], target))
 		if scores[num] >= target:
 			labels[num]['background'] = 'black'
 		if scores[num] >= target - 3:
 			labels[num]['foreground'] = 'red'
 		
-		now.set("{:2}".format(num))
+		now.set("{:2}".format(num + 1))
 		
 		if scores[num] == target:
 			end = True
@@ -69,13 +69,13 @@ def lottery():
 		for r in records:
 			f.write(r + ' ')
 		f.write('\n')
-		f.write('striked=' + str(striked) + ' ' + members[striked] + '\n')
+		f.write('striked=' + str(striked + 1) + ' ' + members[striked] + '\n')
 
 def reset():
 	i = 0
 	for m in members:
 		scores[i] = 0
-		texts[i].set("{:2} {} : {:2}/{}".format(i, m, scores[i], target))
+		texts[i].set("{:2} {} : {:2}/{}".format(i + 1, m, scores[i], target))
 		labels[i]['foreground'] = 'black'
 		labels[i]['background'] = ''
 		i = i + 1
@@ -86,57 +86,59 @@ def changeSeedOption():
 	else:
 		textBox['state'] = 'enable'
 
-with open(path, "r", encoding="utf-8") as f:
-	for i in f:
-		members.append(i.rstrip('\n'))
-		index = index + 1
-	print(members)
+if __name__ == '__main__':
 
-print("index={}".format(index))
+	with open(path, "r", encoding="utf-8") as f:
+		for i in f:
+			members.append(i.rstrip('\n'))
+			index = index + 1
+		print(members)
 
-root.title('Lottery')
+	print("index={}".format(index))
 
-frame1 = ttk.Frame(root)
+	root.title('Lottery')
 
-my_font = font.Font(root, family="System", size=32, weight="bold")
+	frame1 = ttk.Frame(root)
 
-i = 0
-for m in members:
-	scores.append(0)
-	texts.append(StringVar())
-	texts[i].set("{:2} {} : {:2}/{}".format(i, m, scores[i], target))
+	my_font = font.Font(root, family="System", size=32, weight="bold")
 
-	labels.append(ttk.Label(frame1, textvariable=texts[i], font=my_font))
+	i = 0
+	for m in members:
+		scores.append(0)
+		texts.append(StringVar())
+		texts[i].set("{:2} {} : {:2}/{}".format(i + 1, m, scores[i], target))
 
-	i = i + 1
+		labels.append(ttk.Label(frame1, textvariable=texts[i], font=my_font))
 
-startButton = ttk.Button(frame1, text='Start', command=lottery)
-resetButton = ttk.Button(frame1, text='Reset', command=reset)
-seedLabel = ttk.Label(frame1, text='Seed')
-radioButton1 = ttk.Radiobutton(frame1, text='Auto', value='Auto', variable=seedOption, command=changeSeedOption)
-radioButton2 = ttk.Radiobutton(frame1, text='Manual', value='Manual', variable=seedOption,  command=changeSeedOption)
-textBox = ttk.Entry(frame1, textvariable=manualSeed, width=20, state='disable')
-blink = ttk.Label(frame1, textvariable=now, font=my_font)
+		i = i + 1
 
-frame1.grid(row=0,column=0,sticky=(N,E,S,W))
+	startButton = ttk.Button(frame1, text='Start', command=lottery)
+	resetButton = ttk.Button(frame1, text='Reset', command=reset)
+	seedLabel = ttk.Label(frame1, text='Seed')
+	radioButton1 = ttk.Radiobutton(frame1, text='Auto', value='Auto', variable=seedOption, command=changeSeedOption)
+	radioButton2 = ttk.Radiobutton(frame1, text='Manual', value='Manual', variable=seedOption,  command=changeSeedOption)
+	textBox = ttk.Entry(frame1, textvariable=manualSeed, width=20, state='disable')
+	blink = ttk.Label(frame1, textvariable=now, font=my_font)
 
-i = 0
-for l in labels:
-	l.grid(row=i, column=0, sticky=W)
-	i = i + 1
+	frame1.grid(row=0,column=0,sticky=(N,E,S,W))
 
-startButton.grid(row=i, column=0, sticky=W)
-resetButton.grid(row=i, column=1)
+	i = 0
+	for l in labels:
+		l.grid(row=i, column=0, sticky=W)
+		i = i + 1
 
-seedLabel.grid(row=i+1, column=0, sticky=W)
-radioButton1.grid(row=i+1, column=1)
-radioButton2.grid(row=i+1, column=2)
-textBox.grid(row=i+1, column=3)
-blink.grid(row=i+1, column=4)
+	startButton.grid(row=i, column=0, sticky=W)
+	resetButton.grid(row=i, column=1)
 
-seedOption.set('Auto')
+	seedLabel.grid(row=i+1, column=0, sticky=W)
+	radioButton1.grid(row=i+1, column=1)
+	radioButton2.grid(row=i+1, column=2)
+	textBox.grid(row=i+1, column=3)
+	blink.grid(row=i+1, column=4)
 
-for child in frame1.winfo_children():
-    child.grid_configure(padx=5, pady=5)
+	seedOption.set('Auto')
 
-root.mainloop()
+	for child in frame1.winfo_children():
+		child.grid_configure(padx=5, pady=5)
+
+	root.mainloop()
