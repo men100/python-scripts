@@ -4,12 +4,13 @@ import tkinter.font as font
 import random
 import time
 import datetime
+import argparse
 
 root = Tk()
 
 path = 'members.txt'
 index = 0
-target = 50
+target = 100
 now = StringVar()
 seedOption = StringVar()
 manualSeed = StringVar()
@@ -20,6 +21,15 @@ labels = []
 scores = []
 texts = []
 records = []
+
+def get_args():
+	parser = argparse.ArgumentParser()
+
+	parser.add_argument("--target", help="Specify target value")
+
+	args = parser.parse_args()
+
+	return args
 
 def lottery():
 	resetButton['state'] = 'disable'
@@ -64,8 +74,12 @@ def lottery():
 
 	out = "lottery_{}.txt".format(startTime)
 	with open(out, "w", encoding="utf-8") as f:
-		f.write('seed=' + seed + '\n')
-		f.write('number=')
+		f.write('seed={}\n'.format(seed))
+		f.write('target={}\n'.format(target))
+		f.write('index={}\n'.format(index))
+		f.writelines(' '.join(members))
+		f.write('\n')
+		f.write('numbers=')
 		for r in records:
 			f.write(r + ' ')
 		f.write('\n')
@@ -87,6 +101,10 @@ def changeSeedOption():
 		textBox['state'] = 'enable'
 
 if __name__ == '__main__':
+	args = get_args()
+	if args.target:
+		target = int(args.target)
+		print('target=' + str(target))
 
 	with open(path, "r", encoding="utf-8") as f:
 		for i in f:
