@@ -8,7 +8,7 @@ host_name = "input your printer's host_name (or ip)"
 base_url = f"http://{host_name}"
 
 def sendGetRequest(end_point, params=None):
-  url = f"http://{host_name}{end_point}"
+  url = f"{base_url}{end_point}"
   print(f"url={url}")
   if params is not None:
     print(f"params={params}")
@@ -20,7 +20,7 @@ def sendGetRequest(end_point, params=None):
     print("Error:", response.status_code)
 
 def sendPostRequest(end_point, json=None):
-  url = f"http://{host_name}{end_point}"
+  url = f"{base_url}{end_point}"
   print(f"url={url}")
   response = requests.post(url, json=json)
 
